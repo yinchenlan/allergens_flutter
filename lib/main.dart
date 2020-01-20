@@ -196,8 +196,8 @@ class DisplayResultsScreenState extends State<DisplayResultsScreen>
             labelColor: Colors.grey,
             tabs: [
               Icon(Icons.find_in_page),
-              Icon(Icons.translate),
-              Icon(Icons.photo)
+              Icon(Icons.photo),
+              Icon(Icons.translate)
             ],
             controller: _tabController,
           )),
@@ -219,6 +219,7 @@ class DisplayResultsScreenState extends State<DisplayResultsScreen>
                     ));
                   },
                 ),
+                Image.file(File(imagePath)),
                 new SingleChildScrollView(
                     child: new Padding(
                         padding: const EdgeInsets.all(24.0),
@@ -226,8 +227,7 @@ class DisplayResultsScreenState extends State<DisplayResultsScreen>
                             (snapshot.data.translatedText != null)
                                 ? snapshot.data.translatedText
                                 : '',
-                            style: TextStyle(fontSize: 20.0)))),
-                Image.file(File(imagePath))
+                            style: TextStyle(fontSize: 20.0))))
               ], controller: _tabController);
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
