@@ -156,7 +156,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DisplayResultsScreen(ingredients: ingred),
+                builder: (context) =>
+                    DisplayResultsScreen(ingredients: ingred, imagePath: path),
               ),
             );
           } catch (e) {
@@ -172,14 +173,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 class DisplayResultsScreenState extends State<DisplayResultsScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  DisplayResultsScreenState(Future<Ingredients> ingredients) {
+  String imagePath;
+  DisplayResultsScreenState(Future<Ingredients> ingredients, String imagePath) {
     this.ingredients = ingredients;
+    this.imagePath = imagePath;
   }
   Future<Ingredients> ingredients;
 
   @override
   void initState() {
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -192,8 +195,9 @@ class DisplayResultsScreenState extends State<DisplayResultsScreen>
             unselectedLabelColor: Colors.white,
             labelColor: Colors.grey,
             tabs: [
-              Text('Allergens', style: TextStyle(fontSize: 20.0)),
-              Text('Translation', style: TextStyle(fontSize: 20.0))
+              Icon(Icons.find_in_page),
+              Icon(Icons.translate),
+              Icon(Icons.photo)
             ],
             controller: _tabController,
           )),
@@ -222,7 +226,8 @@ class DisplayResultsScreenState extends State<DisplayResultsScreen>
                             (snapshot.data.translatedText != null)
                                 ? snapshot.data.translatedText
                                 : '',
-                            style: TextStyle(fontSize: 20.0))))
+                            style: TextStyle(fontSize: 20.0)))),
+                Image.file(File(imagePath))
               ], controller: _tabController);
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -243,12 +248,14 @@ class DisplayResultsScreenState extends State<DisplayResultsScreen>
 // A widget that displays the picture taken by the user.
 class DisplayResultsScreen extends StatefulWidget {
   final Future<Ingredients> ingredients;
+  final String imagePath;
 
-  const DisplayResultsScreen({Key key, this.ingredients}) : super(key: key);
+  const DisplayResultsScreen({Key key, this.ingredients, this.imagePath})
+      : super(key: key);
 
   @override
   DisplayResultsScreenState createState() =>
-      DisplayResultsScreenState(ingredients);
+      DisplayResultsScreenState(ingredients, imagePath);
 }
 
 class Ingredients {
