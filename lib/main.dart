@@ -139,25 +139,20 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             // Construct the path where the image should be saved using the
             // pattern package.
-            final path = join(
-              // Store the picture in the temp directory.
-              // Find the temp directory using the `path_provider` plugin.
-              (await getTemporaryDirectory()).path,
-              '${DateTime.now()}.png',
-            );
+            
 
             // Attempt to take a picture and log where it's been saved.
-            await _controller.takePicture(path);
+            final xfile = await _controller.takePicture();
 
             final Future<Ingredients> ingred =
-                upload(File(path), await authHeader);
+                upload(File(xfile.path), await authHeader);
 
             // If the picture was taken, display it on a new screen.
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    DisplayResultsScreen(ingredients: ingred, imagePath: path),
+                    DisplayResultsScreen(ingredients: ingred, imagePath: xfile.path),
               ),
             );
           } catch (e) {
